@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: './src/main.tsx',
@@ -30,6 +31,21 @@ module.exports = {
         test: /\.js$/,
         loader: 'source-map-loader',
       },
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: ['postcss-preset-env'],
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   // TODO 看externals相關資訊
@@ -38,6 +54,9 @@ module.exports = {
   //   "react-dom": "ReactDOM"
   // },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[hash].css',
+    }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),

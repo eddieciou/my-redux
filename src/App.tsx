@@ -1,5 +1,6 @@
-import React from 'react';
+import './app.css';
 import { Counter } from './app/ui/components/Counter';
+import React from 'react';
 
 const App = () => {
   return (

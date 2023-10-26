@@ -9,7 +9,7 @@ export const Counter = () => {
 
   return (
     <section>
-      <p>{count}</p>
+      <p className="text-red-500">{count}</p>
       <div>
         <button onClick={() => dispatch(increment())}>+</button>
         <button onClick={() => dispatch(decrement())}>-</button>
