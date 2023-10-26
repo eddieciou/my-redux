@@ -1,7 +1,12 @@
 import React from 'react';
+import { Counter } from './app/ui/components/Counter';
 
 const App = () => {
-  return <div>Hello World</div>;
+  return (
+    <div>
+      <Counter />
+    </div>
+  );
 };
 
 export default App;
