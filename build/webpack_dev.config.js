@@ -1,3 +1,4 @@
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -5,8 +6,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: './src/main.tsx',
   output: {
-    filename: 'bundle.js',
-    path: __dirname + '/dist',
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
+    path: path.resolve(__dirname, '../dist/'),
   },
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'source-map',
@@ -33,18 +35,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: ['postcss-preset-env'],
-              },
-            },
-          },
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
     ],
   },
@@ -55,7 +46,7 @@ module.exports = {
   // },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[hash].css',
+      filename: 'css/[name].[hash:8].css',
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
@@ -65,6 +56,26 @@ module.exports = {
       failOnError: true,
     }),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: 'commons',
+          chunks: 'initial',
+          minSize: 0,
+          minChunks: 2,
+        },
+        vendors: {
+          test: /node_modules/,
+          name: 'vendors',
+          minSize: 0,
+          minChunks: 1,
+          chunks: 'initial',
+          priority: 1,
+        },
+      },
+    },
+  },
   devServer: {
     open: true,
     port: 3000,
